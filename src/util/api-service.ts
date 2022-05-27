@@ -20,12 +20,19 @@ export class ApiService {
   }
   ){
     try {
-      return await axiosService({
+      // return await axiosService({
+      //   data,
+      //   method,
+      //   url,
+      //   ...config,
+      // });
+      let result =  await axiosService({
         data,
         method,
         url,
         ...config,
-      })
+      });
+      return result;
     } catch (error) {
       throw error;
     }

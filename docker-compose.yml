@@ -3,6 +3,10 @@ version: '3'
 volumes:
   mysql_data:
       driver: local
+  db:
+  static-files: {}
+  cache:
+    driver: local
 
 services:
   mysql:
@@ -30,3 +34,51 @@ services:
         - 8080:8080
       depends_on:
         - mysql
+
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/mysql
+      - static-files:/usr/static/images
+  app:
+    depends_on:
+      - mysqldb
+      - cache
+    build: .
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - "6767:8081"
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      DB_HOST: mysqldb
+      DB_USER: $MYSQLDB_USER
+      DB_PASSWORD: $MYSQLDB_ROOT_PASSWORD
+      DB_NAME: $MYSQLDB_DATABASE
+      DB_PORT: $MYSQLDB_DOCKER_PORT
+    stdin_open: true
+    tty: true
+    links:
+      - cache
+    volumes:
+      - ./:/src
+ 
+  cache:
+    image: "redis:alpine"
+    restart: always
+    expose:
+      - "6379"
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes: 
+      - cache:/data

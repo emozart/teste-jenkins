@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import qs from 'qs';
-import atob from 'atob';
+import * as qs from 'qs';
+import * as atob from 'atob';
 import { keycloackConfig } from "../config/keycloak.config"
 import { ApiService } from '../util/api-service';
 import { RequestBody } from './interfaces/request-body';
 
 
 @Injectable()
-export class KeycloackService extends ApiService {
+export class KeycloakService extends ApiService {
 
     private async getKeycloakServiceArgs(){
         const cacheRefreshToken: string = (await this.cacheService.get(keycloackConfig.clientRefreshToken)) as string;
@@ -20,8 +20,8 @@ export class KeycloackService extends ApiService {
     }
 
     private async cacheToken(token:string, cachekey:string){
-        const {exprationTime,iat} = JSON.parse(atob(token.split('.')[1]));
-        const tokenExprationTime = exprationTime - iat - 30;
+        const {exp,iat} = JSON.parse(atob(token.split('.')[1]));
+        const tokenExprationTime = exp - iat - 30;
 
         if(
             (cachekey === keycloackConfig.clientRefreshToken && tokenExprationTime > 300)
@@ -38,6 +38,7 @@ export class KeycloackService extends ApiService {
         try {
             await this.cacheToken(accessToken,keycloackConfig.clientToken);
             await this.cacheToken(refreshToken,keycloackConfig.clientRefreshToken);
+            return accessToken;
         } catch (error) {
             return accessToken;
         }
@@ -64,7 +65,7 @@ export class KeycloackService extends ApiService {
                 {
                     config:{
                         headers:{
-                        'content-type':'applicationx-www-form-urlencoded'
+                        'content-type':'application/x-www-form-urlencoded'
                         },
                     },
                     data: qs.stringify(paylod),
@@ -76,7 +77,7 @@ export class KeycloackService extends ApiService {
     }
 
     async getKeycloakToken(){
-        let token: string = (await this.cacheService.get(keycloackConfig.clientToken)) as string;
+        let token: string = await this.cacheService.get(keycloackConfig.clientToken) as string;
         if(!token) {
             token = await this.updateKeycloakServiceCache();
         }

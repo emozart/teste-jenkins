@@ -3,11 +3,11 @@ import { AxiosRequestConfig } from 'axios';
 import { CacheService } from '../cache/cache.service';
 import { ApiService } from './api-service';
 import axiosService  from './axios-service';
-import { KeycloackService } from '../keycloack/keycloak.service';
+import { KeycloakService } from '../keycloak/keycloak.service';
 
 @Injectable()
 export class ApiAuthenticatedService extends ApiService {
-  constructor(public cacheService:CacheService,public keycloackService:KeycloackService){
+  constructor(public cacheService:CacheService,public keycloakService:KeycloakService){
     super(cacheService);
   }
 
@@ -23,7 +23,7 @@ export class ApiAuthenticatedService extends ApiService {
     config: AxiosRequestConfig; 
   }
   ){
-    const token = await this.keycloackService.getKeycloakToken();
+    const token = await this.keycloakService.getKeycloakToken();
     const headers = {
       Authorization: `Bearer ${token}`,
       ...(config?.headers || {}),

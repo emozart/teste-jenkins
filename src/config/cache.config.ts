@@ -1,4 +1,6 @@
-require('dotenv-flow').config()
+require('dotenv-flow').config({
+    silent: true
+  });
 
 export const cacheConfig = {
     cacheLongPeriod: process.env.CACHE_LONG_PERIOD,

@@ -1,0 +1,84 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AccessTokenType {
+  access_token: String!
+  refresh_token: String!
+  expires_in: Float!
+  refresh_expires_in: Float!
+  token_type: String!
+}
+
+type UserType {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  isActive: Boolean!
+}
+
+type PhotoType {
+  id: ID!
+  name: String!
+  description: String!
+  filename: String!
+  views: Float!
+  isPublished: Boolean!
+  user: UserType!
+  userId: Float!
+}
+
+type Query {
+  sayHello: String!
+  findAllUsers: [UserType!]!
+  findOneUser(id: Int!): UserType!
+  findAllPhotos: [PhotoType!]!
+  findOnePhoto(id: Int!): PhotoType!
+}
+
+type Mutation {
+  login(input: ValidationLoginUserInput!): AccessTokenType!
+  createUser(input: CreateUserInput!): UserType!
+  updateUser(id: Float!, input: UpdateUserInput!): UserType!
+  deleteUser(id: Float!): String!
+  createPhoto(input: CreatePhotoInput!): PhotoType!
+  updatePhoto(id: Float!, input: UpdatePhotoInput!): PhotoType!
+  deletePhoto(id: Float!): String!
+}
+
+input ValidationLoginUserInput {
+  userName: String!
+  password: String!
+}
+
+input CreateUserInput {
+  firstName: String!
+  lastName: String!
+  isActive: Boolean!
+}
+
+input UpdateUserInput {
+  id: Float!
+  firstName: String!
+  lastName: String!
+  isActive: Boolean!
+}
+
+input CreatePhotoInput {
+  name: String!
+  description: String!
+  filename: String!
+  isPublished: Boolean!
+  views: Float!
+  userId: Float!
+}
+
+input UpdatePhotoInput {
+  id: Float!
+  name: String!
+  description: String!
+  filename: String!
+  isPublished: Boolean!
+  views: Float!
+  userId: Float!
+}
