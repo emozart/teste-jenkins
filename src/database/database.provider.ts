@@ -10,6 +10,10 @@ export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
     useFactory: async () => {
+      console.log(`dbConfig.DB:${dbConfig.DB}`);
+      console.log(`dbConfig.USER: ${dbConfig.USER}`);
+      console.log(`dbConfig.PASSWORD: ${dbConfig.PASSWORD}`);
+      console.log(`dbConfig.port: ${dbConfig.port}`);
       const sequelize = new Sequelize(
         dbConfig.DB, 
         dbConfig.USER, 
@@ -17,7 +21,7 @@ export const databaseProviders = [
         {
           host: dbConfig.HOST,
           dialect: "mysql",
-          port: Number(dbConfig.port) || 3308,
+          port: Number(dbConfig.port) || 3307,
           pool: {
             max: dbConfig.pool.max,
             min: dbConfig.pool.min,

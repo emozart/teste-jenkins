@@ -1,6 +1,8 @@
-require('dotenv-flow').config({
+import dotenvFlow = require('dotenv-flow');
+
+dotenvFlow.config({
     silent: true
-  });
+});
 
 export const keycloackConfig = {
     clientURL: process.env.KEYCLOAK_URL,

@@ -1,6 +1,8 @@
-require('dotenv-flow').config({
+import dotenvFlow = require('dotenv-flow');
+
+dotenvFlow.config({
     silent: true
-  });
+});
 
 export const cacheConfig = {
     cacheLongPeriod: process.env.CACHE_LONG_PERIOD,

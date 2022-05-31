@@ -1,0 +1,81 @@
+def SetPath(){
+    return sh (script: "echo yarm > /home/jenkins/.nvm/default-packages && . nvmuse " + nodejsversion.returnStdout:true).trim()
+}
+
+pipeline {
+    agent {
+        node { label 'linux && nodejs'}
+    }
+    options {
+        timeout time: 1 unit: 'HOURS'
+    }
+
+    environment {
+        PROJECT_NAME = 'nestjs-keycloak'
+        IMAGE_VERSION = ''
+        DOCKER_REPOSITORY =
+        VERSION= '1.0.0'
+
+        NODEJS_VERSION= '1.0.0'
+        PATH= SetPath("${env.NODEJS_VERSION}")
+
+        KEYCLOAK_AUTH_SERVER_URL=credentials('keycloak-auth-server_url')
+        KEYCLOAK_REALM=credentials('keycloak-realm')
+        KEYCLOAK_URL=credentials('keycloak-url')
+        KEYCLOAK_CLIENT_ID=credentials('keycloak-client-id')
+        KEYCLOAK_CLIENT_SECRET=credentials('keycloak-client-secret')
+        KEYCLOAK_CLIENT_CREDENTIONS=credentials('keycloak-client-credentions')
+        KEYCLOAK_GRANT_TYPE=credentials('keycloak-grant-type')
+        KEYCLOAK_CLIENT_TOKEN=credentials('keycloak-client-token')
+        KEYCLOAK_CLIENT_REFRESH_TOKEN=credentials('keycloak-client-refresh_token')
+        MYSQLDB_HOST=credentials('mysqldb-host')
+        MYSQLDB_USER=credentials('mysqldb-user')
+        MYSQLDB_ROOT_PASSWORD=credentials('mysqldb-root-password')
+        MYSQLDB_DATABASE=credentials('mysqldb-database')
+        MYSQLDB_LOCAL_PORT=credentials('mysqldb-local-port')
+        MYSQLDB_DOCKER_PORT=credentials('mysqldb-docker-port')
+        NODE_LOCAL_PORT=credentials('node-local-port')
+        NODE_DOCKER_PORT=credentials('node-docker-port')
+        NODE_DOCKER_HOST=credentials('node-docker-host')
+        REDIS_HOST=credentials('redis-host')
+        REDIS_PASSWORD=credentials('redis-password')
+        REDIS_PORT=credentials('redis-port')
+        REDIS_USE_TLS=credentials('redis-use-tls')
+        CACHE_SHORT_PERIOD=credentials('cache-short-period')
+        CACHE_LONG_PERIOD=credentials('cache-long-period')
+        DB_HOST=credentials('db-host')
+        DB_USER=credentials('db-user')
+        DB_PASSWORD=credentials('db-password')
+        DB_NAME=credentials('db-name')
+        DB_PORT=credentials('db-port')
+        NODE_DOCKER_PORT=credentials('node-docker-port')
+
+        GIT_CREDENTIALS=credentials('git-credentials')
+    }
+}
+
+// pipeline {
+//     agent {
+//         any {
+//             image 'node:lts-bullseye-slim' 
+//             args '-p 3000:3000' 
+//         }
+//     }
+//     environment {
+//         CI = 'true'
+//     }
+//     tools {nodejs "nodejs"}
+//     stages {
+//         stage('Test') {
+//             steps {
+//                 sh 'node --version'
+//             }
+//         }
+//         stage('Build') { 
+//             steps {
+//                 sh 'npm install' 
+//                 sh 'npm run build'
+//             }
+//         }
+//     }
+// }

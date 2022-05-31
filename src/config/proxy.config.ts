@@ -1,6 +1,8 @@
-require('dotenv-flow').config({
+import dotenvFlow = require('dotenv-flow');
+
+dotenvFlow.config({
     silent: true
-  });
+});
 
 export const proxyConfig = {
     password: process.env.PROXY_PASSWORD,

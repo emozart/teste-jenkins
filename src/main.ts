@@ -1,10 +1,12 @@
 import { BadRequestException, ValidationError, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-
-require('dotenv-flow').config();
+import dotenvFlow = require('dotenv-flow');
 
 async function bootstrap() {
+  dotenvFlow.config({
+    silent: true
+  });
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
